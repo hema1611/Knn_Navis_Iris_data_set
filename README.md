@@ -476,10 +476,10 @@ git push -u origin main
 
 <ul>
     <li><strong>Email:</strong> <a href="mailto:hemalathapanchala31@gmail.com">hemalathapanchala31@gmail.com</a></li>
-    <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/hemalatha-panchala-">Hemalatha Panchala</a></li>
-    <li><strong>GitHub:</strong> <a href="https://github.com/hemalathapanchala">@hemalathapanchala</a></li>
+    <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/hemalatha-panchala-3a90a1250/">Hemalatha Panchala</a></li>
+    <li><strong>GitHub:</strong> <a href="https://github.com/hema1611/Knn_Navis_Iris_data_set.git">@hemalathapanchala</a></li>
     <li><strong>Project Repository:</strong> <a href="https://github.com/hemalathapanchala/iris-classifier">github.com/hemalathapanchala/iris-classifier</a></li>
-    <li><strong>Live Demo:</strong> <a href="https://iris-classifier-app.onrender.com">iris-classifier-app.onrender.com</a></li>
+    <li><strong>Live Demo:</strong> <a href="https://knn-navis-iris-data-set.onrender.com">iris-classifier-app.onrender.com</a></li>
 </ul>
 
 <hr>
