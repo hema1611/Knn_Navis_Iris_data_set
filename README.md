@@ -87,6 +87,8 @@
 <hr>
 
 <h2 id="screenshots">📸 Screenshots</h2>
+![image alt](https://github.com/hema1611/Knn_Navis_Iris_data_set/blob/9b6bdce904c2cf02667a000fa53b46edf47fba1b/Screenshot_14-2-2026_191017_knn-navis-iris-data-set.onrender.com.jpeg)
+![image alt](https://github.com/hema1611/Knn_Navis_Iris_data_set/blob/9b6bdce904c2cf02667a000fa53b46edf47fba1b/Screenshot_14-2-2026_19938_knn-navis-iris-data-set.onrender.com.jpeg)
 
 <p><em>(Add screenshots of your application here)</em></p>
 
