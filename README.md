@@ -80,7 +80,7 @@
 
 <p>Check out the live application:</p>
 <ul>
-    <li><strong>Render Deployment:</strong> <a href="https://iris-classifier-app.onrender.com">https://iris-classifier-app.onrender.com</a></li>
+    <li><strong>Render Deployment:</strong> <a href="https://knn-navis-iris-data-set.onrender.com">https://iris-classifier-app.onrender.com</a></li>
     <li><strong>GitHub Repository:</strong> <a href="https://github.com/hemalathapanchala/iris-classifier">https://github.com/hemalathapanchala/iris-classifier</a></li>
 </ul>
 
