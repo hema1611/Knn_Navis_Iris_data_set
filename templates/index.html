@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iris Dashboard</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+/* ================= GLOBAL ================= */
+body{
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:white;
+    min-height:100vh;
+    font-family:'Segoe UI',sans-serif;
+    overflow-x:hidden;
+    animation:fadePage 1s ease;
+}
+
+@keyframes fadePage{
+    from{opacity:0;transform:translateY(20px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+/* ================= GLASS CARD ================= */
+.glass{
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,0.15);
+    padding:28px;
+    border-radius:22px;
+    margin-bottom:22px;
+    transition:.4s;
+    box-shadow:0 10px 35px rgba(0,0,0,.3);
+}
+
+.glass:hover{
+    transform:translateY(-6px);
+    box-shadow:0 20px 45px rgba(0,0,0,.45);
+}
+
+/* ================= INPUTS ================= */
+.form-control{
+    background:rgba(255,255,255,0.1);
+    border:none;
+    color:white;
+    border-radius:12px;
+    transition:.3s;
+}
+
+.form-control:focus{
+    background:rgba(255,255,255,0.2);
+    color:white;
+    box-shadow:0 0 0 3px rgba(0,255,255,.25);
+    transform:scale(1.02);
+}
+
+/* ================= BUTTONS ================= */
+.btn{
+    border-radius:30px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.btn-info{
+    background:linear-gradient(45deg,#00c6ff,#0072ff);
+    border:none;
+}
+
+.btn-info:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 20px rgba(0,114,255,.5);
+}
+
+.btn-warning{
+    background:linear-gradient(45deg,#ffb347,#ffcc33);
+    color:black;
+    border:none;
+    animation:glowBtn 1.5s infinite alternate;
+}
+
+.btn-secondary{
+    background:rgba(255,255,255,0.15);
+    border:none;
+}
+
+@keyframes glowBtn{
+    from{box-shadow:0 0 5px #ffd700;}
+    to{box-shadow:0 0 18px #ffd700;}
+}
+
+/* ================= PREDICTION ================= */
+.prediction-box{
+    margin-top:22px;
+    padding:18px;
+    background:linear-gradient(135deg,#00c9ff33,#92fe9d33);
+    border-radius:16px;
+    text-align:center;
+    font-size:18px;
+    font-weight:600;
+    animation:fadePredict .8s ease;
+}
+
+@keyframes fadePredict{
+    from{opacity:0;transform:scale(.9);}
+    to{opacity:1;transform:scale(1);}
+}
+
+/* ================= TABLE ================= */
+.custom-table{
+    width:100%;
+    border-collapse:collapse;
+    color:white;
+}
+
+.custom-table th{
+    background:rgba(255,255,255,.15);
+}
+
+.custom-table th,
+.custom-table td{
+    border:1px solid rgba(255,255,255,.25);
+    padding:10px;
+    text-align:center;
+    transition:.3s;
+}
+
+.custom-table tr:hover td{
+    background:rgba(0,255,255,.15);
+    transform:scale(1.02);
+}
+
+/* ================= RIGHT PANEL ================= */
+#rightSection{
+    display:none;
+    animation:slideRight .8s ease forwards;
+}
+
+@keyframes slideRight{
+    from{opacity:0;transform:translateX(60px);}
+    to{opacity:1;transform:translateX(0);}
+}
+
+/* ================= MOBILE ================= */
+@media(max-width:992px){
+    h2{font-size:22px;}
+    .glass{padding:20px;}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container py-5">
+<h2 class="text-center mb-5">Project: Iris data Classification </h2>
+
+<div class="row">
+
+<!-- ================= LEFT SIDE ================= -->
+<div class="col-lg-5">
+<div class="glass">
+
+<form action="/predict" method="POST">
+
+<div class="row g-3">
+<div class="col-6">
+<label>Sepal Length</label>
+<input type="number" step="any" name="sepal_length" class="form-control" required>
+</div>
+
+<div class="col-6">
+<label>Sepal Width</label>
+<input type="number" step="any" name="sepal_width" class="form-control" required>
+</div>
+
+<div class="col-6">
+<label>Petal Length</label>
+<input type="number" step="any" name="petal_length" class="form-control" required>
+</div>
+
+<div class="col-6">
+<label>Petal Width</label>
+<input type="number" step="any" name="petal_width" class="form-control" required>
+</div>
+</div>
+
+<div class="mt-4 text-center">
+<button type="button" id="knnBtn" class="btn btn-warning">KNN</button>
+<button type="button" id="nbBtn" class="btn btn-secondary">Naive Bayes</button>
+<input type="hidden" name="modelType" id="modelType" value="KNN">
+</div>
+
+<div class="mt-4">
+<button type="submit" class="btn btn-info w-100">Predict</button>
+</div>
+
+</form>
+
+<div class="prediction-box">
+{% if prediction_text %}
+🌿 Predicted Species: {{ prediction_text }}
+{% else %}
+Prediction will appear here
+{% endif %}
+</div>
+
+</div>
+</div>
+
+<!-- ================= RIGHT SIDE ================= -->
+<div class="col-lg-7" id="rightSection">
+
+<div class="glass">
+
+<h4>Training Results</h4>
+<p><b>Accuracy:</b> {{ train_accuracy }}</p>
+
+<h6>Classification Report</h6>
+<table class="custom-table">
+<tr>
+<th>Class</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>F1</th>
+<th>Support</th>
+</tr>
+
+{% if train_report %}
+{% for label, values in train_report.items() %}
+{% if label not in ['accuracy','macro avg','weighted avg'] %}
+<tr>
+<td>{{ label }}</td>
+<td>{{ values['precision'] }}</td>
+<td>{{ values['recall'] }}</td>
+<td>{{ values['f1-score'] }}</td>
+<td>{{ values['support'] }}</td>
+</tr>
+{% endif %}
+{% endfor %}
+{% endif %}
+</table>
+
+<h6 class="mt-4">Confusion Matrix</h6>
+<table class="custom-table">
+{% if train_cm %}
+{% for row in train_cm %}
+<tr>
+{% for val in row %}
+<td>{{ val }}</td>
+{% endfor %}
+</tr>
+{% endfor %}
+{% endif %}
+</table>
+
+<hr class="text-light my-4">
+
+<h4>Testing Results</h4>
+<p><b>Accuracy:</b> {{ test_accuracy }}</p>
+
+<h6>Classification Report</h6>
+<table class="custom-table">
+<tr>
+<th>Class</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>F1</th>
+<th>Support</th>
+</tr>
+
+{% if test_report %}
+{% for label, values in test_report.items() %}
+{% if label not in ['accuracy','macro avg','weighted avg'] %}
+<tr>
+<td>{{ label }}</td>
+<td>{{ values['precision'] }}</td>
+<td>{{ values['recall'] }}</td>
+<td>{{ values['f1-score'] }}</td>
+<td>{{ values['support'] }}</td>
+</tr>
+{% endif %}
+{% endfor %}
+{% endif %}
+</table>
+
+<h6 class="mt-4">Confusion Matrix</h6>
+<table class="custom-table">
+{% if test_cm %}
+{% for row in test_cm %}
+<tr>
+{% for val in row %}
+<td>{{ val }}</td>
+{% endfor %}
+</tr>
+{% endfor %}
+{% endif %}
+</table>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+const knnBtn=document.getElementById("knnBtn");
+const nbBtn=document.getElementById("nbBtn");
+const hidden=document.getElementById("modelType");
+
+knnBtn.onclick=()=>{
+    hidden.value="KNN";
+    knnBtn.classList.add("btn-warning");
+    nbBtn.classList.remove("btn-warning");
+    nbBtn.classList.add("btn-secondary");
+}
+
+nbBtn.onclick=()=>{
+    hidden.value="NB";
+    nbBtn.classList.add("btn-warning");
+    knnBtn.classList.remove("btn-warning");
+    knnBtn.classList.add("btn-secondary");
+}
+
+/* SHOW RIGHT PANEL AFTER PREDICTION */
+window.addEventListener("load",function(){
+    const prediction="{{ prediction_text|default('') }}";
+    if(prediction.trim()!==""){
+        document.getElementById("rightSection").style.display="block";
+    }
+});
+
+/* button press animation */
+document.querySelectorAll("button").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+        btn.style.transform="scale(0.95)";
+        setTimeout(()=>btn.style.transform="scale(1)",150);
+    });
+});
+</script>
+
+</body>
+</html>
